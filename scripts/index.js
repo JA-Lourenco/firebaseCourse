@@ -28,6 +28,11 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 const myCollection = "classA";
 
+// Buttons
+const addingBtn = document.getElementById("addButton");
+const deleteBtn = document.getElementById("delButton");
+const updatingBtn = document.getElementById("updButton");
+
 const getAllDocuments = async (database, collReference) => {
   try {
     const myDocs = [];
@@ -82,11 +87,11 @@ const getDocByName = async (database, collReference, name) => {
 getDocByName(db, myCollection, "Marcos");
 
 const newDoc = {
-  name: "Marcos",
-  surname: "Santos",
+  name: "Gabrielle",
+  surname: "Rodrigues",
   grades: {
-    grade1: 9.6,
-    grade2: 7.5,
+    grade1: 7.6,
+    grade2: 8.3,
   },
 };
 
@@ -100,7 +105,7 @@ const addingDoc = async (database, collReference, data) => {
   }
 };
 
-addingDoc(db, myCollection, newDoc);
+addingBtn.addEventListener("click", () => addingDoc(db, myCollection, newDoc));
 
 const delDoc = async (database, collReference, id) => {
   try {
@@ -115,10 +120,12 @@ const delDoc = async (database, collReference, id) => {
   }
 };
 
-delDoc(db, myCollection, "ixiteMAbmmaI8jjzAb89");
+deleteBtn.addEventListener("click", () =>
+  delDoc(db, myCollection, "n7R13yStZEE3214aqWoN")
+);
 
 const updatedData = {
-  "grades.grade1": 5.7,
+  "grades.grade1": 6,
 };
 
 const updatingDocById = async (database, collReference, id, data) => {
@@ -135,4 +142,6 @@ const updatingDocById = async (database, collReference, id, data) => {
   }
 };
 
-updatingDocById(db, myCollection, "BcJYQmWwBIMZWYsdLvQu", updatedData);
+updatingBtn.addEventListener("click", () =>
+  updatingDocById(db, myCollection, "hOny0hKRMrBf4elyKKWj", updatedData)
+);
