@@ -11,6 +11,7 @@ import {
   addDoc,
   deleteDoc,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -32,6 +33,18 @@ const myCollection = "classA";
 const addingBtn = document.getElementById("addButton");
 const deleteBtn = document.getElementById("delButton");
 const updatingBtn = document.getElementById("updButton");
+
+const getSnapshot = (database, collReference, id) => {
+  try {
+    onSnapshot(doc(database, collReference, id), (doc) => {
+      console.log("getSnapshot", doc.data());
+    });
+  } catch (error) {
+    console.log("getSnapshot error", error);
+  }
+};
+
+getSnapshot(db, myCollection, "BcJYQmWwBIMZWYsdLvQu");
 
 const getAllDocuments = async (database, collReference) => {
   try {
@@ -125,7 +138,7 @@ deleteBtn.addEventListener("click", () =>
 );
 
 const updatedData = {
-  "grades.grade1": 6,
+  "grades.grade1": 9.6,
 };
 
 const updatingDocById = async (database, collReference, id, data) => {
@@ -143,5 +156,5 @@ const updatingDocById = async (database, collReference, id, data) => {
 };
 
 updatingBtn.addEventListener("click", () =>
-  updatingDocById(db, myCollection, "hOny0hKRMrBf4elyKKWj", updatedData)
+  updatingDocById(db, myCollection, "BcJYQmWwBIMZWYsdLvQu", updatedData)
 );
