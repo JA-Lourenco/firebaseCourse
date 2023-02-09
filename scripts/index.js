@@ -14,6 +14,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 const firebaseConfig = {
   apiKey: env.API_KEY,
   authDomain: env.AUTH_DOMAIN,
@@ -28,6 +30,7 @@ initializeApp(firebaseConfig);
 
 const db = getFirestore();
 const myCollection = "classA";
+const auth = getAuth();
 
 // Buttons
 const addingBtn = document.getElementById("addButton");
@@ -158,3 +161,19 @@ const updatingDocById = async (database, collReference, id, data) => {
 updatingBtn.addEventListener("click", () =>
   updatingDocById(db, myCollection, "BcJYQmWwBIMZWYsdLvQu", updatedData)
 );
+
+const createUserEmailPass = async (authParam, email, password) => {
+  try {
+    console.log("Creating User...");
+    const resp = await createUserWithEmailAndPassword(
+      authParam,
+      email,
+      password
+    );
+    console.log("createUserEmailPass resp", resp);
+  } catch (error) {
+    console.log("createUserEmailPass error", error);
+  }
+};
+
+// createUserEmailPass(auth, "newtest@test.com", "123456");
