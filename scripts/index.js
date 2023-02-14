@@ -14,7 +14,12 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: env.API_KEY,
@@ -36,6 +41,10 @@ const auth = getAuth();
 const addingBtn = document.getElementById("addButton");
 const deleteBtn = document.getElementById("delButton");
 const updatingBtn = document.getElementById("updButton");
+
+auth.onAuthStateChanged((user) => {
+  user ? console.log("User logged in", user) : console.log("No user logged in");
+});
 
 const getSnapshot = (database, collReference, id) => {
   try {
@@ -177,3 +186,27 @@ const createUserEmailPass = async (authParam, email, password) => {
 };
 
 // createUserEmailPass(auth, "newtest@test.com", "123456");
+
+const signInEmailPass = async (authParam, email, password) => {
+  try {
+    console.log("Logging In...");
+    const resp = await signInWithEmailAndPassword(authParam, email, password);
+    console.log("signInEmailPass", resp);
+    console.log("signInEmailPass current user", auth.currentUser);
+  } catch (error) {
+    console.log("signInEmailPass error", error);
+  }
+};
+
+// signInEmailPass(auth, "newtest@test.com", "123456");
+
+const signOutUser = async (authParam) => {
+  try {
+    console.log("Logging Out...");
+    await signOut(authParam);
+  } catch (error) {
+    console.log("signOutUser error", error);
+  }
+};
+
+// setTimeout(() => signOutUser(auth), 5000);
