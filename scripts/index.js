@@ -19,6 +19,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -41,6 +43,8 @@ const auth = getAuth();
 const addingBtn = document.getElementById("addButton");
 const deleteBtn = document.getElementById("delButton");
 const updatingBtn = document.getElementById("updButton");
+const loginBtn = document.getElementById("loginButton");
+const logoutBtn = document.getElementById("logoutButton");
 
 auth.onAuthStateChanged((user) => {
   user ? console.log("User logged in", user) : console.log("No user logged in");
@@ -187,9 +191,19 @@ const createUserEmailPass = async (authParam, email, password) => {
 
 // createUserEmailPass(auth, "newtest@test.com", "123456");
 
+const loginPersistence = async () => {
+  try {
+    console.log("Persistence...");
+    await setPersistence(auth, browserSessionPersistence);
+  } catch (error) {
+    console.log("loginPersistence error", error);
+  }
+};
+
 const signInEmailPass = async (authParam, email, password) => {
   try {
     console.log("Logging In...");
+    await loginPersistence();
     const resp = await signInWithEmailAndPassword(authParam, email, password);
     console.log("signInEmailPass", resp);
     console.log("signInEmailPass current user", auth.currentUser);
@@ -198,7 +212,13 @@ const signInEmailPass = async (authParam, email, password) => {
   }
 };
 
-// signInEmailPass(auth, "newtest@test.com", "123456");
+loginBtn.addEventListener("click", () =>
+  setTimeout(() => {
+    loginBtn.innerText = "Logged In";
+    logoutBtn.innerText = "Logout";
+    signInEmailPass(auth, "newtest@test.com", "123456");
+  }, 5000)
+);
 
 const signOutUser = async (authParam) => {
   try {
@@ -209,4 +229,10 @@ const signOutUser = async (authParam) => {
   }
 };
 
-// setTimeout(() => signOutUser(auth), 5000);
+logoutBtn.addEventListener("click", () =>
+  setTimeout(() => {
+    logoutBtn.innerText = "Logged Out";
+    loginBtn.innerText = "Login";
+    signOutUser(auth);
+  }, 5000)
+);
